@@ -16,8 +16,6 @@
 
 namespace ncnn {
 
-DEFINE_LAYER_CREATOR(Packing)
-
 Packing::Packing()
 {
     one_blob_only = true;
@@ -28,6 +26,12 @@ int Packing::load_param(const ParamDict& pd)
 {
     out_elempack = pd.get(0, 1);
     use_padding = pd.get(1, 0);
+
+    cast_type_from = pd.get(2, 0);
+    cast_type_to = pd.get(3, 0);
+
+    storage_type_from = pd.get(4, 0);
+    storage_type_to = pd.get(5, 0);
 
     return 0;
 }
@@ -102,7 +106,7 @@ int Packing::forward(const Mat& bottom_blob, Mat& top_blob, const Option& opt) c
         if (top_blob.empty())
             return -100;
 
-        #pragma omp parallel for
+        #pragma omp parallel for num_threads(opt.num_threads)
         for (int i = 0; i < outh; i++)
         {
             unsigned char* outptr = (unsigned char*)top_blob + i * w * out_elemsize;
@@ -140,7 +144,7 @@ int Packing::forward(const Mat& bottom_blob, Mat& top_blob, const Option& opt) c
         if (top_blob.empty())
             return -100;
 
-        #pragma omp parallel for
+        #pragma omp parallel for num_threads(opt.num_threads)
         for (int q = 0; q < outc; q++)
         {
             Mat out = top_blob.channel(q);

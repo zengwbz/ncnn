@@ -1,5 +1,5 @@
 implement elementwise addition with/without broadcast using BinaryOp operation
-```
+```cpp
 void binary_add(const ncnn::Mat& a, const ncnn::Mat& b, ncnn::Mat& c)
 {
     ncnn::Option opt;
@@ -32,7 +32,7 @@ void binary_add(const ncnn::Mat& a, const ncnn::Mat& b, ncnn::Mat& c)
 ```
 
 implement 3x3 box blur on three channel image using ConvolutionDepthWise operation
-```
+```cpp
 void convolution_3x3_boxblur_RGB(const ncnn::Mat& rgb, ncnn::Mat& out)
 {
     ncnn::Option opt;
@@ -72,7 +72,7 @@ void convolution_3x3_boxblur_RGB(const ncnn::Mat& rgb, ncnn::Mat& out)
 }
 ```
 transpose Mat, chw to cwh
-```
+```cpp
 void transpose(const ncnn::Mat& in, ncnn::Mat& out)
 {
     ncnn::Option opt;
@@ -98,7 +98,7 @@ void transpose(const ncnn::Mat& in, ncnn::Mat& out)
 ```
 apply instance normalization
 // x = (x - mean) / sqrt(var)
-```
+```cpp
 void normalize(const ncnn::Mat& in, ncnn::Mat& out)
 {
     ncnn::Option opt;
@@ -135,16 +135,16 @@ void normalize(const ncnn::Mat& in, ncnn::Mat& out)
 ```
 
 # cpu -> gpu -> forward -> gpu -> cpu
-```
+```cpp
 ncnn::create_gpu_instance();
 
 {
 ncnn::VulkanDevice* vkdev = ncnn::get_gpu_device();
 
-ncnn::VkWeightBufferAllocator g_weight_vkallocator(vkdev);
-ncnn::VkBlobBufferAllocator g_blob_vkallocator(vkdev);
-ncnn::VkStagingBufferAllocator g_staging_vkallocator(vkdev);
-ncnn::VkWeightStagingBufferAllocator g_weight_staging_vkallocator(vkdev);
+ncnn::VkWeightAllocator g_weight_vkallocator(vkdev);
+ncnn::VkBlobAllocator g_blob_vkallocator(vkdev);
+ncnn::VkStagingAllocator g_staging_vkallocator(vkdev);
+ncnn::VkWeightStagingAllocator g_weight_staging_vkallocator(vkdev);
 
 // create layer
 ncnn::Layer* convolution = ncnn::create_layer("Convolution");
